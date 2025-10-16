@@ -7,7 +7,8 @@
     "start": "node bot/index.js",
     "dev": "nodemon bot/index.js",
     "admin": "node admin/server.js",
-    "admin:dev": "nodemon admin/server.js"
+    "admin:dev": "nodemon admin/server.js",
+    "build": "echo 'No build step required for Wa-Catalog Bot'"
   },
   "keywords": [],
   "author": "",
