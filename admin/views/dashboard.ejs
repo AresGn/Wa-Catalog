@@ -1,37 +1,101 @@
 <div class="dashboard">
-  <h1>Dashboard</h1>
-  <p class="subtitle">Welcome to wa-catalog Admin Panel</p>
+  <div class="dashboard-header">
+    <div>
+      <h1>Dashboard</h1>
+      <p class="subtitle">Welcome to wa-catalog Admin Panel</p>
+    </div>
+    <div class="header-date">
+      <i class="fas fa-calendar"></i>
+      <span id="current-date"></span>
+    </div>
+  </div>
 
   <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-icon">👥</div>
-      <div class="stat-content">
+    <div class="stat-card stat-primary">
+      <div class="stat-header">
         <h3>Total Vendors</h3>
-        <p class="stat-value"><%= vendorStats.totalVendors || 0 %></p>
-        <p class="stat-sub"><%= vendorStats.activeVendors || 0 %> active</p>
+        <i class="fas fa-store"></i>
       </div>
+      <p class="stat-value"><%= vendorStats.totalVendors || 0 %></p>
+      <p class="stat-sub"><%= vendorStats.activeVendors || 0 %> active • <%= (vendorStats.totalVendors || 0) - (vendorStats.activeVendors || 0) %> inactive</p>
     </div>
 
-    <div class="stat-card">
-      <div class="stat-icon">📦</div>
-      <div class="stat-content">
+    <div class="stat-card stat-success">
+      <div class="stat-header">
         <h3>Total Products</h3>
-        <p class="stat-value"><%= productStats.totalProducts || 0 %></p>
-        <p class="stat-sub"><%= productStats.inStock || 0 %> in stock</p>
+        <i class="fas fa-box"></i>
       </div>
+      <p class="stat-value"><%= productStats.totalProducts || 0 %></p>
+      <p class="stat-sub"><%= productStats.inStock || 0 %> in stock • <%= (productStats.totalProducts || 0) - (productStats.inStock || 0) %> out of stock</p>
+    </div>
+
+    <div class="stat-card stat-info">
+      <div class="stat-header">
+        <h3>Active Vendors</h3>
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <p class="stat-value"><%= vendorStats.activeVendors || 0 %></p>
+      <p class="stat-sub"><%= ((vendorStats.activeVendors || 0) / Math.max(vendorStats.totalVendors || 1, 1) * 100).toFixed(1) %>% of total</p>
+    </div>
+
+    <div class="stat-card stat-warning">
+      <div class="stat-header">
+        <h3>In Stock</h3>
+        <i class="fas fa-package"></i>
+      </div>
+      <p class="stat-value"><%= productStats.inStock || 0 %></p>
+      <p class="stat-sub"><%= ((productStats.inStock || 0) / Math.max(productStats.totalProducts || 1, 1) * 100).toFixed(1) %>% availability</p>
     </div>
   </div>
 
-  <div class="actions">
-    <a href="/vendors/new" class="btn btn-primary">➕ Add Vendor</a>
-    <a href="/products/new" class="btn btn-primary">➕ Add Product</a>
+  <div class="actions-section">
+    <h2>Quick Actions</h2>
+    <div class="actions">
+      <a href="/vendors/new" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Add Vendor
+      </a>
+      <a href="/products/new" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Add Product
+      </a>
+      <a href="/vendors" class="btn btn-secondary">
+        <i class="fas fa-list"></i> View All Vendors
+      </a>
+      <a href="/products" class="btn btn-secondary">
+        <i class="fas fa-list"></i> View All Products
+      </a>
+    </div>
   </div>
 
-  <div class="quick-links">
-    <h2>Quick Links</h2>
-    <ul>
-      <li><a href="/vendors">Manage Vendors →</a></li>
-      <li><a href="/products">Manage Products →</a></li>
-    </ul>
+  <div class="dashboard-footer-section">
+    <div class="quick-links-box">
+      <h2><i class="fas fa-link"></i> Quick Links</h2>
+      <ul>
+        <li><a href="/vendors"><i class="fas fa-arrow-right"></i> Manage Vendors</a></li>
+        <li><a href="/products"><i class="fas fa-arrow-right"></i> Manage Products</a></li>
+      </ul>
+    </div>
+
+    <div class="system-info-box">
+      <h2><i class="fas fa-info-circle"></i> System Info</h2>
+      <div class="info-items">
+        <div class="info-item">
+          <span>API Status</span>
+          <span class="status-badge status-active">Operational</span>
+        </div>
+        <div class="info-item">
+          <span>Database</span>
+          <span class="status-badge status-active">Connected</span>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const dateEl = document.getElementById('current-date');
+  const now = new Date();
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  dateEl.textContent = now.toLocaleDateString('en-US', options);
+});
+</script>

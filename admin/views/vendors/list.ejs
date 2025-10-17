@@ -1,6 +1,6 @@
 <div class="page-header">
-  <h1>Vendors Management</h1>
-  <a href="/vendors/new" class="btn btn-primary">➕ Add New Vendor</a>
+  <h1><i class="fas fa-store"></i> Vendors Management</h1>
+  <a href="/vendors/new" class="btn btn-primary"><i class="fas fa-plus"></i> Add New Vendor</a>
 </div>
 
 <% if (vendors && vendors.length > 0) { %>
@@ -22,7 +22,7 @@
             <td class="vendor-name">
               <%= vendor.name %>
               <% if (vendor.verified) { %>
-                <span class="badge badge-success">✓</span>
+                <span class="badge badge-success"><i class="fas fa-check"></i></span>
               <% } %>
             </td>
             <td><a href="https://wa.me/<%= vendor.whatsapp_number.replace(/\D/g, '') %>" target="_blank"><%= vendor.whatsapp_number %></a></td>
@@ -34,14 +34,14 @@
             </td>
             <td>
               <% if (vendor.rating_count > 0) { %>
-                ⭐ <%= vendor.rating_average.toFixed(1) %> (<%= vendor.rating_count %>)
+                <i class="fas fa-star" style="color: #ffc107;"></i> <%= vendor.rating_average.toFixed(1) %> (<%= vendor.rating_count %>)
               <% } else { %>
                 <span class="text-muted">No ratings</span>
               <% } %>
             </td>
             <td>
-              <a href="/vendors/<%= vendor.id %>/edit" class="btn btn-sm btn-secondary">Edit</a>
-              <button class="btn btn-sm btn-danger" onclick="deleteVendor('<%= vendor.id %>')">Delete</button>
+              <a href="/vendors/<%= vendor.id %>/edit" class="btn btn-sm btn-secondary"><i class="fas fa-edit"></i> Edit</a>
+              <button class="btn btn-sm btn-danger" onclick="deleteVendor('<%= vendor.id %>')"><i class="fas fa-trash"></i> Delete</button>
             </td>
           </tr>
         <% }); %>
@@ -50,8 +50,8 @@
   </div>
 <% } else { %>
   <div class="empty-state">
-    <p>No vendors found</p>
-    <a href="/vendors/new" class="btn btn-primary">Create your first vendor</a>
+    <p><i class="fas fa-inbox" style="font-size: 40px; color: #ddd; margin-bottom: 10px; display: block;"></i>No vendors found</p>
+    <a href="/vendors/new" class="btn btn-primary"><i class="fas fa-plus"></i> Create your first vendor</a>
   </div>
 <% } %>
 

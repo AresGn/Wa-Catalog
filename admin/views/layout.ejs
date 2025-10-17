@@ -4,36 +4,74 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= title %> - wa-catalog Admin</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <nav class="navbar">
-    <div class="container">
-      <div class="logo">
-        <h1>🚀 wa-catalog Admin</h1>
+  <div class="admin-wrapper">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-container">
+          <img src="/logo.png" alt="wa-catalog" class="logo-img">
+          <div class="logo-text">
+            <h2>wa-catalog</h2>
+            <span>Admin Panel</span>
+          </div>
+        </div>
       </div>
-      <ul class="nav-links">
-        <li><a href="/" class="<%= title === 'Dashboard' ? 'active' : '' %>">Dashboard</a></li>
-        <li><a href="/vendors" class="<%= title === 'Vendors' ? 'active' : '' %>">Vendors</a></li>
-        <li><a href="/products" class="<%= title === 'Products' ? 'active' : '' %>">Products</a></li>
-      </ul>
+      
+      <nav class="sidebar-nav">
+        <a href="/" class="nav-item <%= title === 'Dashboard' ? 'active' : '' %>">
+          <i class="fas fa-chart-line"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="/bot" class="nav-item <%= title === 'Bot Analytics' ? 'active' : '' %>">
+          <i class="fas fa-robot"></i>
+          <span>Bot</span>
+        </a>
+        <a href="/vendors" class="nav-item <%= title === 'Vendors' ? 'active' : '' %>">
+          <i class="fas fa-store"></i>
+          <span>Vendors</span>
+        </a>
+        <a href="/products" class="nav-item <%= title === 'Products' ? 'active' : '' %>">
+          <i class="fas fa-box"></i>
+          <span>Products</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-info">
+          <i class="fas fa-info-circle"></i>
+          <p>System Status: <span class="status-online">Online</span></p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <% if (typeof message !== 'undefined') { %>
+        <div class="alert alert-success">
+          <i class="fas fa-check-circle"></i>
+          <%= message %>
+        </div>
+      <% } %>
+      <% if (typeof error !== 'undefined') { %>
+        <div class="alert alert-error">
+          <i class="fas fa-exclamation-circle"></i>
+          <%= error %>
+        </div>
+      <% } %>
+
+      <main class="container">
+        <%- body %>
+      </main>
+
+      <footer class="footer">
+        <p>&copy; 2025 wa-catalog Admin. All rights reserved.</p>
+      </footer>
     </div>
-  </nav>
-
-  <main class="container">
-    <% if (typeof message !== 'undefined') { %>
-      <div class="alert alert-success"><%= message %></div>
-    <% } %>
-    <% if (typeof error !== 'undefined') { %>
-      <div class="alert alert-error"><%= error %></div>
-    <% } %>
-
-    <%- body %>
-  </main>
-
-  <footer class="footer">
-    <p>&copy; 2024 wa-catalog. All rights reserved.</p>
-  </footer>
+  </div>
 
   <script src="/js/main.js"></script>
 </body>

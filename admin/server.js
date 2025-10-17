@@ -45,6 +45,7 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/vendors', require('./routes/api/vendors'));
 app.use('/api/products', require('./routes/api/products'));
+app.use('/api/bot', require('./routes/api/bot'));
 app.use('/', require('./routes/pages'));
 
 // Error handling middleware

@@ -1,0 +1,670 @@
+<div class="bot-stats">
+  <div class="stats-header">
+    <h1><i class="fas fa-robot"></i> Bot Analytics</h1>
+    <p class="subtitle">WhatsApp Catalog Bot Performance & Usage Statistics</p>
+  </div>
+
+  <!-- Overview Stats -->
+  <div class="stats-grid">
+    <div class="stat-card stat-primary">
+      <div class="stat-header">
+        <h3>Total Users</h3>
+        <i class="fas fa-users"></i>
+      </div>
+      <p class="stat-value"><%= botStats.totalUsers || 0 %></p>
+      <p class="stat-sub"><%= botStats.activeToday || 0 %> active today</p>
+    </div>
+
+    <div class="stat-card stat-success">
+      <div class="stat-header">
+        <h3>Total Searches</h3>
+        <i class="fas fa-search"></i>
+      </div>
+      <p class="stat-value"><%= botStats.totalSearches || 0 %></p>
+      <p class="stat-sub"><%= botStats.searchesToday || 0 %> today</p>
+    </div>
+
+    <div class="stat-card stat-info">
+      <div class="stat-header">
+        <h3>Link Clicks</h3>
+        <i class="fas fa-mouse"></i>
+      </div>
+      <p class="stat-value"><%= botStats.totalClicks || 0 %></p>
+      <p class="stat-sub">Avg <span class="highlight"><%= botStats.avgResponseTime || 0 %>ms</span> response</p>
+    </div>
+
+    <div class="stat-card stat-warning">
+      <div class="stat-header">
+        <h3>Conversion Rate</h3>
+        <i class="fas fa-chart-pie"></i>
+      </div>
+      <p class="stat-value"><%= (botStats.conversionRate || 0).toFixed(1) %>%</p>
+      <p class="stat-sub">Search to Contact</p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="bot-content">
+    <!-- Top Searches -->
+    <div class="content-box">
+      <h2><i class="fas fa-fire"></i> Top Search Keywords</h2>
+      <% if (botStats.topSearches && Object.keys(botStats.topSearches).length > 0) { %>
+        <div class="list-items">
+          <% Object.entries(botStats.topSearches).sort((a, b) => b[1] - a[1]).slice(0, 10).forEach((item, idx) => { %>
+            <div class="list-item">
+              <div class="list-rank"><%= idx + 1 %></div>
+              <div class="list-content">
+                <span class="list-title"><%= item[0] %></span>
+                <span class="list-meta"><%= item[1] %> searches</span>
+              </div>
+              <div class="list-bar">
+                <div class="progress-bar" style="width: <%= (item[1] / Math.max(...Object.values(botStats.topSearches))) * 100 %>%"></div>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+      <% } else { %>
+        <p class="empty-message">No search data available yet</p>
+      <% } %>
+    </div>
+
+    <!-- Top Vendors -->
+    <div class="content-box">
+      <h2><i class="fas fa-star"></i> Top Vendors (Most Viewed)</h2>
+      <% if (botStats.topVendors && botStats.topVendors.length > 0) { %>
+        <div class="vendor-list">
+          <% botStats.topVendors.slice(0, 8).forEach((vendor, idx) => { %>
+            <div class="vendor-item">
+              <div class="vendor-rank"><%= idx + 1 %></div>
+              <div class="vendor-info">
+                <h4><%= vendor.name %></h4>
+                <p><i class="fas fa-map-marker-alt"></i> <%= vendor.city %></p>
+              </div>
+              <div class="vendor-stats">
+                <div class="vendor-stat">
+                  <span class="stat-label">Views</span>
+                  <span class="stat-number"><%= vendor.views || 0 %></span>
+                </div>
+                <div class="vendor-stat">
+                  <span class="stat-label">Clicks</span>
+                  <span class="stat-number"><%= vendor.clicks || 0 %></span>
+                </div>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+      <% } else { %>
+        <p class="empty-message">No vendor data available yet</p>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Daily Activity -->
+  <div class="bot-content">
+    <div class="content-box full-width">
+      <h2><i class="fas fa-chart-line"></i> Daily Activity (Last 7 Days)</h2>
+      <% if (botStats.dailyActivity && botStats.dailyActivity.length > 0) { %>
+        <div class="chart-container">
+          <div class="mini-chart">
+            <% botStats.dailyActivity.forEach((day) => { %>
+              <div class="chart-bar-group">
+                <div class="chart-bar searches" style="height: <%= (day.searches / Math.max(...botStats.dailyActivity.map(d => d.searches))) * 100 %>%">
+                  <span class="tooltip"><%= day.searches %> searches</span>
+                </div>
+                <div class="chart-bar clicks" style="height: <%= (day.clicks / Math.max(...botStats.dailyActivity.map(d => d.clicks))) * 100 %>%">
+                  <span class="tooltip"><%= day.clicks %> clicks</span>
+                </div>
+                <div class="chart-bar users" style="height: <%= (day.users / Math.max(...botStats.dailyActivity.map(d => d.users))) * 100 %>%">
+                  <span class="tooltip"><%= day.users %> users</span>
+                </div>
+              </div>
+            <% }); %>
+          </div>
+          <div class="chart-legend">
+            <span class="legend-item searches"><i class="fas fa-circle"></i> Searches</span>
+            <span class="legend-item clicks"><i class="fas fa-circle"></i> Clicks</span>
+            <span class="legend-item users"><i class="fas fa-circle"></i> Users</span>
+          </div>
+        </div>
+      <% } else { %>
+        <p class="empty-message">No activity data available yet</p>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Detailed Metrics -->
+  <div class="bot-content">
+    <div class="metrics-grid">
+      <div class="metric-box">
+        <h3>Performance Metrics</h3>
+        <div class="metric-items">
+          <div class="metric-row">
+            <span>Avg Response Time</span>
+            <strong><%= botStats.avgResponseTime || 0 %>ms</strong>
+          </div>
+          <div class="metric-row">
+            <span>Max Response Time</span>
+            <strong><%= botStats.maxResponseTime || 0 %>ms</strong>
+          </div>
+          <div class="metric-row">
+            <span>Success Rate</span>
+            <strong><%= (botStats.successRate || 0).toFixed(1) %>%</strong>
+          </div>
+          <div class="metric-row">
+            <span>Error Rate</span>
+            <strong><%= (botStats.errorRate || 0).toFixed(1) %>%</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="metric-box">
+        <h3>User Engagement</h3>
+        <div class="metric-items">
+          <div class="metric-row">
+            <span>Avg Searches/User</span>
+            <strong><%= (botStats.avgSearchesPerUser || 0).toFixed(1) %></strong>
+          </div>
+          <div class="metric-row">
+            <span>Avg Clicks/User</span>
+            <strong><%= (botStats.avgClicksPerUser || 0).toFixed(1) %></strong>
+          </div>
+          <div class="metric-row">
+            <span>Return Rate</span>
+            <strong><%= (botStats.returnRate || 0).toFixed(1) %>%</strong>
+          </div>
+          <div class="metric-row">
+            <span>Session Duration</span>
+            <strong><%= botStats.avgSessionDuration || 0 %>s</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="metric-box">
+        <h3>Search Categories</h3>
+        <div class="metric-items">
+          <div class="metric-row">
+            <span>Product Searches</span>
+            <strong><%= botStats.productSearches || 0 %></strong>
+          </div>
+          <div class="metric-row">
+            <span>Vendor Searches</span>
+            <strong><%= botStats.vendorSearches || 0 %></strong>
+          </div>
+          <div class="metric-row">
+            <span>Help Requests</span>
+            <strong><%= botStats.helpRequests || 0 %></strong>
+          </div>
+          <div class="metric-row">
+            <span>Other Queries</span>
+            <strong><%= botStats.otherQueries || 0 %></strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Messages -->
+  <div class="bot-content">
+    <div class="content-box full-width">
+      <h2><i class="fas fa-comments"></i> Recent User Searches</h2>
+      <% if (botStats.recentSearches && botStats.recentSearches.length > 0) { %>
+        <div class="recent-list">
+          <% botStats.recentSearches.slice(0, 15).forEach((search) => { %>
+            <div class="recent-item">
+              <div class="recent-time">
+                <i class="fas fa-clock"></i>
+                <span><%= new Date(search.timestamp).toLocaleString() %></span>
+              </div>
+              <div class="recent-query">
+                <strong><%= search.query %></strong>
+                <% if (search.results) { %>
+                  <span class="result-badge"><%= search.results %> results</span>
+                <% } %>
+              </div>
+              <div class="recent-user">
+                <i class="fas fa-phone"></i>
+                <span><%= search.userPhone %></span>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+      <% } else { %>
+        <p class="empty-message">No search history available</p>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<style>
+.bot-stats {
+  animation: fadeIn 0.3s ease-in;
+}
+
+.stats-header {
+  margin-bottom: 40px;
+}
+
+.bot-stats h1 {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bot-stats .subtitle {
+  color: #666;
+  font-size: 16px;
+}
+
+.bot-content {
+  display: grid;
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+.content-box {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.content-box h2 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+  color: #333;
+  font-size: 18px;
+}
+
+.content-box h2 i {
+  color: #25D366;
+}
+
+.list-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.list-item:hover {
+  background: #f0f0f0;
+}
+
+.list-rank {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: #25D366;
+  color: white;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.list-content {
+  flex: 0 0 200px;
+}
+
+.list-title {
+  display: block;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.list-meta {
+  display: block;
+  font-size: 12px;
+  color: #999;
+}
+
+.list-bar {
+  flex: 1;
+  height: 6px;
+  background: #e0e0e0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #25D366, #1fa853);
+  border-radius: 3px;
+}
+
+.vendor-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 15px;
+}
+
+.vendor-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: linear-gradient(135deg, #f9f9f9 0%, #f0f0f0 100%);
+  border-radius: 8px;
+  border-left: 4px solid #25D366;
+}
+
+.vendor-rank {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: #25D366;
+  color: white;
+  border-radius: 50%;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.vendor-info {
+  flex: 1;
+}
+
+.vendor-info h4 {
+  margin: 0 0 4px 0;
+  color: #333;
+  font-size: 14px;
+}
+
+.vendor-info p {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+}
+
+.vendor-stats {
+  display: flex;
+  gap: 15px;
+  flex-shrink: 0;
+}
+
+.vendor-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: #999;
+  text-transform: uppercase;
+}
+
+.stat-number {
+  font-weight: 700;
+  color: #25D366;
+  font-size: 16px;
+}
+
+.chart-container {
+  padding: 20px 0;
+}
+
+.mini-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  height: 200px;
+  margin-bottom: 20px;
+}
+
+.chart-bar-group {
+  flex: 1;
+  display: flex;
+  gap: 4px;
+  align-items: flex-end;
+  height: 100%;
+}
+
+.chart-bar {
+  flex: 1;
+  border-radius: 4px 4px 0 0;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.chart-bar:hover {
+  opacity: 0.8;
+}
+
+.chart-bar.searches {
+  background: #25D366;
+}
+
+.chart-bar.clicks {
+  background: #34B7F1;
+}
+
+.chart-bar.users {
+  background: #FF9800;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  margin-bottom: 5px;
+}
+
+.chart-bar:hover .tooltip {
+  opacity: 1;
+}
+
+.chart-legend {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #666;
+}
+
+.legend-item.searches i {
+  color: #25D366;
+}
+
+.legend-item.clicks i {
+  color: #34B7F1;
+}
+
+.legend-item.users i {
+  color: #FF9800;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.metric-box {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.metric-box h3 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 16px;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 12px;
+}
+
+.metric-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.metric-row:last-child {
+  border-bottom: none;
+}
+
+.metric-row span {
+  color: #666;
+  font-size: 14px;
+}
+
+.metric-row strong {
+  color: #25D366;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.recent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.recent-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border-left: 4px solid #25D366;
+}
+
+.recent-time {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 160px;
+  color: #999;
+  font-size: 12px;
+}
+
+.recent-time i {
+  color: #25D366;
+}
+
+.recent-query {
+  flex: 1;
+}
+
+.recent-query strong {
+  display: block;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.result-badge {
+  display: inline-block;
+  background: #e8f5e9;
+  color: #2e7d32;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.recent-user {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #666;
+}
+
+.recent-user i {
+  color: #999;
+}
+
+.empty-message {
+  text-align: center;
+  color: #999;
+  padding: 40px 20px;
+  font-style: italic;
+}
+
+.highlight {
+  color: #25D366;
+  font-weight: 700;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .vendor-list {
+    grid-template-columns: 1fr;
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .recent-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .mini-chart {
+    min-height: 150px;
+  }
+}
+</style>

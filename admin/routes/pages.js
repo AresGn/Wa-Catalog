@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const vendorService = require('../services/vendorService');
 const productService = require('../services/productService');
+const botService = require('../services/botService');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -12,6 +13,19 @@ router.get('/', async (req, res, next) => {
       title: 'Dashboard',
       vendorStats,
       productStats
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/bot', async (req, res, next) => {
+  try {
+    const botStats = await botService.getStats();
+
+    res.render('bot-stats', {
+      title: 'Bot Analytics',
+      botStats
     });
   } catch (error) {
     next(error);
