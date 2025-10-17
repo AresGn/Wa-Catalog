@@ -1,0 +1,122 @@
+<div class="form-container">
+  <h1><%= title %></h1>
+
+  <form id="productForm" method="POST" class="form">
+    <div class="form-group">
+      <label for="vendorId">Vendor *</label>
+      <select id="vendorId" name="vendorId" required>
+        <option value="">Select a vendor</option>
+        <% vendors.forEach(vendor => { %>
+          <option 
+            value="<%= vendor.id %>"
+            <%= product?.vendor_id === vendor.id ? 'selected' : '' %>
+          >
+            <%= vendor.name %>
+          </option>
+        <% }); %>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="name">Product Name *</label>
+      <input 
+        type="text" 
+        id="name" 
+        name="name" 
+        value="<%= product?.name || '' %>" 
+        placeholder="iPhone 13 128GB"
+        required
+      >
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="category">Category *</label>
+        <input 
+          type="text" 
+          id="category" 
+          name="category" 
+          value="<%= product?.category || '' %>" 
+          placeholder="Téléphones"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="price">Price (FCFA) *</label>
+        <input 
+          type="number" 
+          id="price" 
+          name="price" 
+          value="<%= product?.price || '' %>" 
+          placeholder="350000"
+          required
+        >
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea 
+        id="description" 
+        name="description" 
+        rows="4"
+        placeholder="Product details..."
+      ><%= product?.description || '' %></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="condition">Condition</label>
+        <select id="condition" name="condition">
+          <option value="Neuf" <%= product?.condition === 'Neuf' ? 'selected' : '' %>>Neuf</option>
+          <option value="Occasion" <%= product?.condition === 'Occasion' ? 'selected' : '' %>>Occasion</option>
+          <option value="Reconditionné" <%= product?.condition === 'Reconditionné' ? 'selected' : '' %>>Reconditionné</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="availability">Availability</label>
+        <select id="availability" name="availability">
+          <option value="in_stock" <%= product?.availability === 'in_stock' ? 'selected' : '' %>>In Stock</option>
+          <option value="out_of_stock" <%= product?.availability === 'out_of_stock' ? 'selected' : '' %>>Out of Stock</option>
+          <option value="sur_commande" <%= product?.availability === 'sur_commande' ? 'selected' : '' %>>Sur Commande</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Save Product</button>
+      <a href="/products" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+
+<script>
+document.getElementById('productForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData);
+  
+  const method = '<%= product?.id ? "PUT" : "POST" %>';
+  const url = '<%= product?.id ? `/api/products/${product.id}` : "/api/products" %>';
+
+  try {
+    const res = await fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    if (res.ok) {
+      alert('Product saved successfully!');
+      window.location.href = '/products';
+    } else {
+      alert('Error saving product: ' + (await res.json()).error);
+    }
+  } catch (err) {
+    alert('Error: ' + err.message);
+  }
+});
+</script>

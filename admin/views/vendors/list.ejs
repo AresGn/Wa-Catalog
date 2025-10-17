@@ -1,0 +1,66 @@
+<div class="page-header">
+  <h1>Vendors Management</h1>
+  <a href="/vendors/new" class="btn btn-primary">➕ Add New Vendor</a>
+</div>
+
+<% if (vendors && vendors.length > 0) { %>
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>WhatsApp</th>
+          <th>City</th>
+          <th>Status</th>
+          <th>Rating</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% vendors.forEach(vendor => { %>
+          <tr>
+            <td class="vendor-name">
+              <%= vendor.name %>
+              <% if (vendor.verified) { %>
+                <span class="badge badge-success">✓</span>
+              <% } %>
+            </td>
+            <td><a href="https://wa.me/<%= vendor.whatsapp_number.replace(/\D/g, '') %>" target="_blank"><%= vendor.whatsapp_number %></a></td>
+            <td><%= vendor.city %></td>
+            <td>
+              <span class="status <%= vendor.status === 'active' ? 'status-active' : 'status-inactive' %>">
+                <%= vendor.status %>
+              </span>
+            </td>
+            <td>
+              <% if (vendor.rating_count > 0) { %>
+                ⭐ <%= vendor.rating_average.toFixed(1) %> (<%= vendor.rating_count %>)
+              <% } else { %>
+                <span class="text-muted">No ratings</span>
+              <% } %>
+            </td>
+            <td>
+              <a href="/vendors/<%= vendor.id %>/edit" class="btn btn-sm btn-secondary">Edit</a>
+              <button class="btn btn-sm btn-danger" onclick="deleteVendor('<%= vendor.id %>')">Delete</button>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+<% } else { %>
+  <div class="empty-state">
+    <p>No vendors found</p>
+    <a href="/vendors/new" class="btn btn-primary">Create your first vendor</a>
+  </div>
+<% } %>
+
+<script>
+function deleteVendor(id) {
+  if (confirm('Are you sure you want to delete this vendor?')) {
+    fetch(`/api/vendors/${id}`, { method: 'DELETE' })
+      .then(r => r.ok ? location.reload() : alert('Error deleting vendor'))
+      .catch(e => alert('Error: ' + e.message));
+  }
+}
+</script>

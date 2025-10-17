@@ -1,0 +1,37 @@
+<div class="dashboard">
+  <h1>Dashboard</h1>
+  <p class="subtitle">Welcome to wa-catalog Admin Panel</p>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">👥</div>
+      <div class="stat-content">
+        <h3>Total Vendors</h3>
+        <p class="stat-value"><%= vendorStats.totalVendors || 0 %></p>
+        <p class="stat-sub"><%= vendorStats.activeVendors || 0 %> active</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">📦</div>
+      <div class="stat-content">
+        <h3>Total Products</h3>
+        <p class="stat-value"><%= productStats.totalProducts || 0 %></p>
+        <p class="stat-sub"><%= productStats.inStock || 0 %> in stock</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <a href="/vendors/new" class="btn btn-primary">➕ Add Vendor</a>
+    <a href="/products/new" class="btn btn-primary">➕ Add Product</a>
+  </div>
+
+  <div class="quick-links">
+    <h2>Quick Links</h2>
+    <ul>
+      <li><a href="/vendors">Manage Vendors →</a></li>
+      <li><a href="/products">Manage Products →</a></li>
+    </ul>
+  </div>
+</div>
