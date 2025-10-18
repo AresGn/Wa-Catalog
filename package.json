@@ -9,6 +9,7 @@
     "admin": "node admin/server.js",
     "admin:dev": "nodemon admin/server.js",
     "db:init": "node admin/scripts/initDatabase.js",
+    "db:init-bot": "node admin/scripts/initBotTables.js",
     "db:setup": "node admin/scripts/setupDatabase.js",
     "db:seed": "node admin/scripts/seedData.js",
     "build": "npm ci --production"
